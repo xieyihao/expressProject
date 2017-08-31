@@ -1,23 +1,19 @@
 /**
- * Created by Administrator on 2017/8/30.
+ * Created by Administrator on 2017/8/31.
  */
-
 import React,{Component} from "react";
 import PropTypes from 'prop-types';
 import DefaultLayout from "./layout";
 
-class HelloMessage extends Component {
+class NoFound extends Component {
   render(){
     return (
       <DefaultLayout title={this.props.title}>
-        <div>Hello react{this.props.name}</div>
+        <h1>{this.props.message}</h1>
+        <h2>{this.props.error.status}</h2>
       </DefaultLayout>
     )
   }
 }
 
-HelloMessage.propTypes = {
-  title: PropTypes.string,
-};
-
-export default HelloMessage;
+export default NoFound;

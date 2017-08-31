@@ -1,26 +1,27 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var lessMiddleware = require('less-middleware');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import lessMiddleware from 'less-middleware';
 
 // var index = require('./routes/index');
 // var users = require('./routes/users');
 // var example = require('./routes/example');
 
+import ExpressReactViews from 'express-react-views';
 import index from './routes/index';
 import users from './routes/users';
 import example from './routes/example';
+import test from './routes/test';
+
 const app = express();
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views_react'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jsx');
-app.engine('jsx', require('express-react-views').createEngine());
+app.engine('jsx', ExpressReactViews.createEngine());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -34,12 +35,16 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/example', example);
+app.use('/test', test);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
+  // res.locals.message = err.message;
+  // res.locals.error = err;
+  // res.render('404');
 });
 
 // error handler
@@ -50,7 +55,11 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  if (err.status === 404) {
+    res.render('404');
+  } else {
+    res.render('error');
+  }
 });
 
 module.exports = app;

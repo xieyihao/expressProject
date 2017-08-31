@@ -11,7 +11,7 @@ class DefaultLayout extends Component {
       <html>
       <head>
         <title>{this.props.title}</title>
-        <meta charset="UTF-8" />
+        <meta name="charset" content="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
         <link rel='stylesheet' href='/stylesheets/style.css'/>
         <link rel='stylesheet' href='/stylesheets/weui.min.css'/>
@@ -22,4 +22,5 @@ class DefaultLayout extends Component {
   }
 }
 
-module.exports = DefaultLayout;
+// module.exports = DefaultLayout;
+export default DefaultLayout;

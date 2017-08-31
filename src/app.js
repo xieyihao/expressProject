@@ -6,11 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var example = require('./routes/example');
+// var index = require('./routes/index');
+// var users = require('./routes/users');
+// var example = require('./routes/example');
 
-var app = express();
+import index from './routes/index';
+import users from './routes/users';
+import example from './routes/example';
+const app = express();
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));

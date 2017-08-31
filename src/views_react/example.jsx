@@ -10,7 +10,7 @@ class HelloMessage extends Component {
   render(){
     return (
       <DefaultLayout title={this.props.title}>
-        <div>Hello dsafjlsd j{this.props.name}</div>
+        <div>Hello react{this.props.name}</div>
       </DefaultLayout>
     )
   }

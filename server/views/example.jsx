@@ -110,6 +110,9 @@ class HelloMessage extends Component {
             <div className="weui-cell__ft">说明文字</div>
           </a>
         </div>
+
+
+        <script> </script>
       </DefaultLayout>
     )
   }

@@ -16,7 +16,7 @@ import users from './routes/users';
 import example from './routes/example';
 import test from './routes/test';
 
-const app = express();
+const app = new express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,6 +31,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../public')));
+
+console.log("【当前运行环境】", process.env.NODE_ENV,);
+if (process.env.NODE_ENV == "local") {
+  console.log("【是开发环境】");
+
+  const webpack = require('webpack');
+  const webpackConfig = require('../webpack/webpack.config');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  // Use this middleware to set up hot module reloading via webpack.
+  const compiler = webpack(webpackConfig);
+  app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 app.use('/', index);
 app.use('/users', users);

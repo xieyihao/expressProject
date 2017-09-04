@@ -1,23 +1,39 @@
 var webpack = require('webpack');
 var path = require('path');
 var glob = require('glob');
+var serverConfig = require("../bin/config");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const ROOT_DIR = path.join(__dirname, "../");
-const BUILD_FOLDER = "public";
-
+// const BUILD_FOLDER = "public";
+const PUBLIC_FOLDER = "www";
+const BUILD_FOLDER = "dist";
 const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
+const publicPath = "/"; //`http://127.0.0.1:${serverConfig.port}/`; "/"
+
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+// 创建多个实例
+const extractCSS = new ExtractTextPlugin('css/weui.min.css');
+const extractLESS = new ExtractTextPlugin('css/style.css');
+// const extractLess = new ExtractTextPlugin({
+//   filename: "[name].[contenthash].css",
+//   disable: process.env.NODE_ENV === "local"
+// });
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const devConfig = {
-  context: path.join(ROOT_DIR, "clinic"),
+  context: path.join(ROOT_DIR, "client"),
   entry: {
-    page1: ['./page1/', hotMiddlewareScript],
-    // page2: ['./client/page2', hotMiddlewareScript]
+    page1: [hotMiddlewareScript, './page1/index.js'],
+    init: [hotMiddlewareScript, './common/common.js'],
   },
   // entry: entries(),
   output: {
-    filename: './js/[name].js',
+    filename: './[name]/bundle.js',
     path: path.join(ROOT_DIR, BUILD_FOLDER), //必须是绝对地址
-    publicPath: "/"
+    publicPath: publicPath // "/"
   },
   devtool: 'eval-source-map',
   module: {
@@ -30,36 +46,45 @@ const devConfig = {
           presets: ['env']
         }
       }
-      // exclude: /node_modules/,
-      // loader: 'babel-loader',
-      // loader: "babel",
-      // query: {
-      //   plugins: [
-      //     ['transform-runtime'],
-      //     // ['import', [{libraryName: "antd", style: true}]],
-      //   ],
-      //   presets: [
-      //     "es2015",
-      //     // "react"
-      //   ],
-      //   cacheDirectory: true
-      // }
     }, {
       test: /\.(png|jpg)$/,
       use: 'url-loader?limit=8192&context=client&name=[path][name].[ext]'
     }, {
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        'css-loader?sourceMap',
-        'resolve-url-loader',
-        'sass-loader?sourceMap'
-      ]
-    }]
+      test: /\.css$/,
+      loader: extractCSS.extract({
+        use: ["css-loader"],
+        fallback: "style-loader"
+      })
+    }, {
+      test: /\.less$/,
+      loader: extractLESS.extract({
+        use: ["css-loader","less-loader"],
+        fallback: "style-loader"
+      })
+    }, {
+    //   test: /\.(jpe?g|png|gif|svg|woff|eot|ttf)$/,
+    //   loader: 'url-loader?limit=1&name=assets/img/[sha512:hash:base64:7].[ext]'
+    // }, {
+      test: /\.json$/,
+      loader: 'file-loader?name=./[path][name].[ext]'
+    }
+    ]
   },
   plugins: [
+    extractCSS,
+    extractLESS,
+
+    // product环境才需要
+    // new CleanWebpackPlugin([BUILD_FOLDER], ROOT_DIR),
+
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+
+    //copy weui.min.css
+    new CopyWebpackPlugin([
+      {from: '../client/common/weui.min.css', to: 'css' }
+    ]),
   ]
 };
 

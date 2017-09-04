@@ -1,8 +1,10 @@
+
 import express from "express";
+import serverConfig from "../../bin/config";
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('test', { title: 'Express' });
+  res.render('test', { title: serverConfig.appName });
 });
 
 export default router;

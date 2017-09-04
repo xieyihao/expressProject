@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "cleanAndCopy": "rm -rf www && cp -r dist www",
     "start": "cross-env NODE_ENV=local node ./bin/index",
-    "devclient": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --progress --colors"
+    "devclient": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --progress --colors && npm run cleanAndCopy"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -17,7 +18,17 @@
     "babel-preset-es2017": "^6.22.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.5",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
     "webpack": "^2.7.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-dev-server": "^2.7.1",

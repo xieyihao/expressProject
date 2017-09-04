@@ -112,7 +112,8 @@ class HelloMessage extends Component {
         </div>
 
 
-        <script> </script>
+        <a href="/test">前往test</a>
+        <script src="/js/page1.js"> </script>
       </DefaultLayout>
     )
   }
